@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ClouBirding</title>
+    <link rel="stylesheet" href="css/Style.css">
+    <script src="js/Login.js" defer></script>
+    <script src="js/Upload.js" defer></script>
+    <script src="js/Logout.js" defer></script>
+
+</head>
+
+<body>
+<!-- Website Title -->
+<h1 style="text-align: center;">ClouBirding</h1>
+
+<!-- Login -->
+<div class="login-container" style="text-align: center; margin: 20px;">
+    <h2>Login</h2>
+    <form id="loginForm" action="/login" method="post" onsubmit="event.preventDefault();login();">
+        <div style="margin: 10px 0;">
+            <label for="username">Username</label><br>
+            <input type="text" id="username" name="username">
+        </div>
+        <div style="margin: 10px 0;">
+            <label for="password">Password</label><br>
+            <input type="password" id="password" name="password">
+        </div>
+        <div style="margin: 15px 0;">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+    <div id="message"></div>
+    <div id="currentUser"></div>
+</div>
+
+<!-- Observation Details  -->
+<div class="section">
+    <h2 style="text-align: center;"> Observation Details</h2>
+    <h4>Species</h4>
+    <input type="text" placeholder="Search species..." id="speciesSearch" style="width: 100%; max-width: 400px;">
+
+    <h4>Observation Time</h4>
+    <div>
+        <select id="year">
+            <option>2025</option>
+            <option>2024</option>
+            <option>2023</option>
+        </select>
+        <select id="month">
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+        </select>
+        <select id="day">
+            <option>01</option>
+            <option>02</option>
+            <option>03</option>
+            <!-- Month date changing NotImplemented -->
+        </select>
+    </div>
+
+    <h4>Observation Location</h4>
+    <h4>Choose from Your Locations</h4>
+    <select id="savedLocations">
+        <option value="park">City Park</option>
+        <option value="forest">National Forest</option>
+        <option value="lake">Lakeside</option>
+    </select>
+    <div style="margin: 10px 0;">
+        <button>Manage "My Locations"</button>
+    </div>
+    <h4>Find it on a Map</h4>
+    <input type="text" placeholder="Search location..." id="locationSearch">
+
+    <h4>Comment (max 500 chars)</h4>
+    <textarea id="comment" maxlength="500" rows="5" style="width: 100%; max-width: 600px;"></textarea>
+</div>
+
+<!-- Upload Observation Media Section -->
+<div class="section">
+    <h2 style="text-align: center;">Upload Observation Media</h2>
+
+    <!-- File upload area -->
+    <div class="file-upload-area" id="uploadArea">
+        <p><strong>Supported formats:</strong> JPG, PNG, GIF, MP4, WEBM</p>
+        <p><strong>Maximum size:</strong> 2GB</p>
+        <input type="file" id="fileInput" class="file-input" accept=".jpg,.png,.gif,.mp4,.webm" multiple>
+        <button class="upload-btn" onclick="openFilePicker()">Choose Files</button>
+    </div>
+
+    <!-- Selected file info -->
+    <div class="file-info" id="fileInfo" style="display: none;">
+        <h4>Selected File(s):</h4>
+        <ul id="fileList"></ul>
+    </div>
+
+    <!-- Upload button -->
+    <button class="upload-btn" id="uploadBtn" onclick="upload()" disabled>Upload File</button>
+
+    <!-- Message area -->
+    <div id="uploadMessage" class="message-area"></div>
+
+    <!-- Preview area -->
+    <div id="preview" class="preview-area" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;"></div>
+</div>
+
+
+</body>
+
+</html>

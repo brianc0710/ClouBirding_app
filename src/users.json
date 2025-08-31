@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2b$10$rYKVwT0mBgD89ECe5WtSVeBcYReApHWzKNE2POkf/jHwWydCdLCBS",
+      "role": "admin",
+      "email": "admin@company.com"
+    },
+    {
+      "id": 2,
+      "username": "user1",
+      "password": "$2b$10$i7LqanolIRrZREmR/lXGPOReuuJk.UWu1mWiwZohZv8BcrI6rCq5u",
+      "role": "normal user"
+    }
+  ]
+}
