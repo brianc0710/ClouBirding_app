@@ -47,7 +47,7 @@ const formatFileSize = (bytes) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Upload file to server
+// Upload file + observation details
 const upload = async () => {
     if (!currentFile) {
         uploadMessageArea.textContent = 'No file selected';
@@ -62,46 +62,54 @@ const upload = async () => {
     }
 
     const uploadBtn = document.querySelector('#uploadBtn');
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = 'Uploading...';
 
     try {
-        // Disable upload button and show loading state
-        uploadBtn.disabled = true;
-        uploadBtn.textContent = 'Uploading...';
-
         const formData = new FormData();
         formData.append('file', currentFile);
 
-        // Send file to backend
+        // Collect observation details
+        formData.append('species', document.querySelector('#speciesSearch').value);
+        formData.append('year', document.querySelector('#year').value);
+        formData.append('month', document.querySelector('#month').value);
+        formData.append('day', document.querySelector('#day').value);
+        formData.append('location', document.querySelector('#savedLocations').value);
+        formData.append('comment', document.querySelector('#comment').value);
+
         const response = await fetch('/api/file/upload', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+            headers: { 'Authorization': `Bearer ${token}` },
             body: formData
         });
 
         const result = await response.json();
 
         if (response.ok) {
-            uploadMessageArea.textContent = 'File uploaded successfully!';
-            uploadedFileName = currentFile.name; // Store uploaded filename
-            window.uploadedFileName = uploadedFileName; // Make globally accessible
-            uploadBtn.textContent = 'Upload File';
-        } else if (response.status === 401) {
-            uploadMessageArea.textContent = 'Unauthorized: Please login again';
-            uploadBtn.textContent = 'Upload File';
+            // show uploaded details
+            uploadMessageArea.innerHTML = `
+                ✅ File uploaded: ${result.fileName} (${result.mimeType}, ${formatFileSize(result.fileSize)})<br>
+                <strong>Observation Details:</strong><br>
+                Species: ${result.species}<br>
+                Date: ${result.year}-${result.month}-${result.day}<br>
+                Location: ${result.location}<br>
+                Comment: ${result.comment || 'N/A'}
+            `;
+
+            uploadedFileName = result.fileName;
+            window.uploadedFileName = uploadedFileName;
         } else {
-            uploadMessageArea.textContent = `Error uploading file: ${result.message || 'Unknown error'}`;
-            uploadBtn.textContent = 'Upload File';
+            uploadMessageArea.textContent = `❌ Error: ${result.message || 'Unknown error'}`;
         }
-    } catch(error) {
+
+    } catch (error) {
         console.error('Error uploading file:', error);
         uploadMessageArea.textContent = 'Network error: Unable to upload file';
-        uploadBtn.textContent = 'Upload File';
     }
 
+    uploadBtn.textContent = 'Upload File';
     uploadBtn.disabled = false;
-}
+};
 
 // Display a message in the UI
 const showMessage = (message, type = 'info') => {

@@ -34,6 +34,18 @@
     <div id="currentUser"></div>
 </div>
 
+<div style="text-align:center; margin:20px;">
+  <h2>Create User</h2>
+  <form id="registerForm" onsubmit="event.preventDefault();register();">
+    <input type="text" id="newUsername" placeholder="Username"><br>
+    <input type="password" id="newPassword" placeholder="Password"><br>
+    <input type="email" id="newEmail" placeholder="Email"><br>
+    <button type="submit">Register</button>
+  </form>
+  <div id="registerMessage"></div>
+</div>
+
+
 <!-- Observation Details  -->
 <div class="section">
     <h2 style="text-align: center;"> Observation Details</h2>
@@ -100,8 +112,10 @@
 
     <!-- Selected file info -->
     <div class="file-info" id="fileInfo" style="display: none;">
-        <h4>Selected File(s):</h4>
-        <ul id="fileList"></ul>
+    <h4>Selected File:</h4>
+    <p>Name: <span id="fileName"></span></p>
+    <p>Size: <span id="fileSize"></span></p>
+    <p>Type: <span id="fileType"></span></p>
     </div>
 
     <!-- Upload button -->

@@ -9,3 +9,7 @@ router.post('/login', login);
 router.post('/logout', authenticateToken, logout);
 
 module.exports = router;
+
+const { createUser } = require("../Controller/CreateUserController");
+
+router.post("/register", createUser);

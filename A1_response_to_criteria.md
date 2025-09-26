@@ -7,33 +7,45 @@ Overview
 - **Name:** Brian Chang
 - **Student number:** n10820566
 - **Application name:** ClouBirding
-- **Two line description:** 
+- **Two line description:**
+  A website for uploading photos and videos of wildlife observations, 
+- which also allows map-based interaction similar to eBird to explore 
+- wildlife data in a given area.
 
 Core criteria
 ------------------------------------------------
 
 ### Containerise the app
 
-- **ECR Repository name:**
-- **Video timestamp:**
+- **ECR Repository name: n10820566-cloubirding_app**
+- **Video timestamp:0:01**
 - **Relevant files:**
-    - 
-
+    - Dockerfile
+    - package.json
+    - app.js
+- 
 ### Deploy the container
 
-- **EC2 instance ID:**
-- **Video timestamp:**
+- **EC2 instance ID: i-0828a2ce4f4a23f0f**
+- **Video timestamp: 0:02**
 
 ### User login
 
-- **One line description:**
-- **Video timestamp:**
+- **One line description:Basic user login using JWT authentication to manage sessions.**
+- **Video timestamp: 0:52**
 - **Relevant files:**
-    - 
+    - src/Route/AuthenticationRoute.js
+    - src/Controller/LoginController.js 
+    - src/Controller/LogoutController.js 
+    - public/js/Login.js 
+    - public/js/Logout.js 
+    - users.json
+
+Haven't truly finished the rest of it
 
 ### REST API
 
-- **One line description:**
+- **One line description: **
 - **Video timestamp:**
 - **Relevant files:**
     - 

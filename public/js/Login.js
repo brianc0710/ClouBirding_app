@@ -50,3 +50,27 @@ const login = async () => {
     }, 5000);
   }
 };
+
+const register = async () => {
+  const username = document.querySelector("#newUsername").value;
+  const password = document.querySelector("#newPassword").value;
+  const email = document.querySelector("#newEmail").value;
+  const registerMsg = document.querySelector("#registerMessage");
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, email })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      registerMsg.innerHTML = "✅ User created successfully!";
+    } else {
+      registerMsg.innerHTML = "❌ " + data.message;
+    }
+  } catch (err) {
+    registerMsg.innerHTML = "❌ Error: " + err.message;
+  }
+};
+
