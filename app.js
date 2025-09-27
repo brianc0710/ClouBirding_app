@@ -5,7 +5,7 @@ const authRoutes = require('./src/Route/AuthenticationRoute');
 const fileRoutes = require('./src/Route/FileRoute');
 const path = require('path');
 const loadSwaggerDocument = require('./src/Function/swagger.js');
-const { getParameter } = require("./src/parameterStore.js");
+const { getParameter } = require('./src/parameterStore.js');
 
 const app = express();
 

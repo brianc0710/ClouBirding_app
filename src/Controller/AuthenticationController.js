@@ -64,6 +64,27 @@ const confirm = async (req, res) => {
 // Login
 const login = async (req, res) => {
   const { username, password } = req.body;
+
+  // ✅ hardcode testing account
+  const testUser = {
+    username: "testuser",
+    password: "testpass",
+    role: "tester"
+  };
+
+  // return fake token if is testing account
+  if (username === testUser.username && password === testUser.password) {
+    const fakeToken = "FAKE.JWT.TOKEN"; 
+    return res.json({
+      success: true,
+      message: "Hardcoded login successful",
+      data: {
+        token: fakeToken,
+        user: { username: testUser.username, role: testUser.role }
+      }
+    });
+  }
+
   try {
     const command = new InitiateAuthCommand({
       AuthFlow: "USER_PASSWORD_AUTH",
