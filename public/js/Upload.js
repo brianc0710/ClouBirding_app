@@ -86,15 +86,18 @@ const upload = async () => {
         const result = await response.json();
 
         if (response.ok) {
-            // show uploaded details
-            uploadMessageArea.innerHTML = `
-                ✅ File uploaded: ${result.fileName} (${result.mimeType}, ${formatFileSize(result.fileSize)})<br>
-                <strong>Observation Details:</strong><br>
-                Species: ${result.species}<br>
-                Date: ${result.year}-${result.month}-${result.day}<br>
-                Location: ${result.location}<br>
-                Comment: ${result.comment || 'N/A'}
+            uploadMessageArea.textContent = `✅ File uploaded: ${result.fileName} (${result.mimeType}, ${formatFileSize(result.fileSize)})`;
+
+            const details = document.createElement("div");
+            details.innerHTML = `
+                <h4>Observation Details:</h4>
+                <p><strong>File URL:</strong> <a href="${result.fileURL}" target="_blank">${result.fileURL}</a></p>
+                <p><strong>Species:</strong> ${document.querySelector("#speciesSearch").value}</p>
+                <p><strong>Time:</strong> ${document.querySelector("#year").value}-${document.querySelector("#month").value}-${document.querySelector("#day").value}</p>
+                <p><strong>Location:</strong> ${document.querySelector("#savedLocations").value}</p>
+                <p><strong>Comment:</strong> ${document.querySelector("#comment").value}</p>
             `;
+            uploadMessageArea.appendChild(details);
 
             uploadedFileName = result.fileName;
             window.uploadedFileName = uploadedFileName;
@@ -104,7 +107,7 @@ const upload = async () => {
 
     } catch (error) {
         console.error('Error uploading file:', error);
-        uploadMessageArea.textContent = 'Network error: Unable to upload file';
+        uploadMessageArea.textContent = 'Network error: ${error.message}';
     }
 
     uploadBtn.textContent = 'Upload File';
@@ -125,3 +128,4 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.addEventListener('change', selectFile);
     }
 });
+
