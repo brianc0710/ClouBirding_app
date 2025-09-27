@@ -15,8 +15,8 @@ function generateSecretHash(username, clientId, clientSecret) {
     .digest("base64");
 }
 
-// Sign up
-const signup = async (req, res) => {
+// Register
+const register = async (req, res) => {
   const { username, password, email } = req.body;
   try {
     const command = new SignUpCommand({
@@ -91,4 +91,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, confirm, login };
+module.exports = { register, confirm, login };
