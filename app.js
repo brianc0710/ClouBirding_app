@@ -29,7 +29,6 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 //Parameter
-const { getParameter } = require("./src/parameterStore");
 
 (async () => {
   const serviceUrl = await getParameter("/n10820566/cloubirding");
