@@ -65,6 +65,7 @@ const upload = async () => {
     uploadBtn.textContent = "Uploading...";
 
     try {
+        // 1. upload file to S3
         const formData = new FormData();
         formData.append("file", currentFile);
 
@@ -76,40 +77,56 @@ const upload = async () => {
 
         const result = await response.json();
 
-        if (response.ok) {
-            const fileURL = result.fileURL;
-
-            const metadataRes = await fetch("/api/observations", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    species: document.querySelector("#speciesSearch").value,
-                    year: document.querySelector("#year").value,
-                    month: document.querySelector("#month").value,
-                    day: document.querySelector("#day").value,
-                    location: document.querySelector("#savedLocations").value,
-                    comment: document.querySelector("#comment").value,
-                    fileURL: fileURL,
-                }),
-            });
-
-            const metadataResult = await metadataRes.json();
-
-            uploadMessageArea.textContent = `✅ File + metadata saved. ID: ${metadataResult.observationId}`;
-        } else {
-            uploadMessageArea.textContent = `❌ Error: ${result.message || "Unknown error"}`;
+        if (!response.ok) {
+            uploadMessageArea.textContent = `❌ Error uploading file: ${result.message || "Unknown error"}`;
+            return;
         }
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        uploadMessageArea.textContent = `Network error: ${error.message}`;
-    }
 
-    uploadBtn.textContent = "Upload File";
-    uploadBtn.disabled = false;
+        const fileURL = result.fileURL;
+
+        // 2. write metadata to DynamoDB
+        const metadataRes = await fetch("/api/observations", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                species: document.querySelector("#speciesSearch").value,
+                year: document.querySelector("#year").value,
+                month: document.querySelector("#month").value,
+                day: document.querySelector("#day").value,
+                location: document.querySelector("#savedLocations").value,
+                comment: document.querySelector("#comment").value,
+                fileURL: fileURL,
+            }),
+        });
+
+        const metadataResult = await metadataRes.json();
+
+        if (metadataRes.ok) {
+            uploadMessageArea.innerHTML = `
+                ✅ File + metadata saved<br>
+                <strong>ID:</strong> ${metadataResult.observationId}<br>
+                <strong>Species:</strong> ${document.querySelector("#speciesSearch").value}<br>
+                <strong>Date:</strong> ${document.querySelector("#year").value}-${document.querySelector("#month").value}-${document.querySelector("#day").value}<br>
+                <strong>Location:</strong> ${document.querySelector("#savedLocations").value}<br>
+                <strong>Comment:</strong> ${document.querySelector("#comment").value}<br>
+                <strong>File URL:</strong> <a href="${fileURL}" target="_blank">${fileURL}</a>
+            `;
+        } else {
+            uploadMessageArea.textContent = `❌ Error saving metadata: ${metadataResult.message}`;
+        }
+
+    } catch (error) {
+        console.error("Error uploading file + metadata:", error);
+        uploadMessageArea.textContent = `Network error: ${error.message}`;
+    } finally {
+        uploadBtn.textContent = "Upload File";
+        uploadBtn.disabled = false;
+    }
 };
+
 
 
 // Display a message in the UI

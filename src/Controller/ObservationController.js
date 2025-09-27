@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
 const TABLE_NAME = process.env.DYNAMO_TABLE;
 
+// Controller/ObservationController.js
 const saveObservation = async (req, res) => {
     try {
         const { species, year, month, day, location, comment, fileURL } = req.body;
@@ -28,12 +29,25 @@ const saveObservation = async (req, res) => {
             },
         };
 
+        console.log("Saving observation:", params);
+
         await dynamoClient.send(new PutItemCommand(params));
-        res.json({ message: "Observation saved", observationId });
+
+        console.log("Saved successfully:", observationId);
+
+        res.status(200).json({
+            success: true,
+            message: "Observation saved",
+            observationId: observationId
+        });
     } catch (err) {
         console.error("Error saving observation:", err);
-        res.status(500).json({ message: "Failed to save observation" });
+        res.status(500).json({
+            success: false,
+            message: "Failed to save observation"
+        });
     }
 };
+
 
 module.exports = { saveObservation };
