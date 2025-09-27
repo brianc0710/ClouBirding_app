@@ -15,7 +15,7 @@ function generateSecretHash(username, clientId, clientSecret) {
     .digest("base64");
 }
 
-// Normal Register
+// Register
 const register = async (req, res) => {
   const { username, password, email } = req.body;
   try {
@@ -38,29 +38,7 @@ const register = async (req, res) => {
   }
 };
 
-/**
- * Admin Register
- */
-const adminregister = async (req, res) => {
-  const { username, email } = req.body;
-  try {
-    const command = new AdminCreateUserCommand({
-      UserPoolId: process.env.COGNITO_USER_POOL_ID,
-      Username: username,
-      UserAttributes: [{ Name: "email", Value: email }],
-      TemporaryPassword: "34556096", 
-      MessageAction: "SUPPRESS" 
-    });
-    const response = await client.send(command);
-    res.status(201).json({ success: true, message: "User created without email verification", data: response });
-  } catch (err) {
-    console.error("Admin register error:", err);
-    res.status(400).json({ success: false, message: err.message });
-  }
-};
-
-
-// confirm user
+// onfirm user
 const confirm = async (req, res) => {
   const { username, code } = req.body;
   try {
@@ -113,4 +91,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, adminregister, confirm, login };
+module.exports = { register, confirm, login };
