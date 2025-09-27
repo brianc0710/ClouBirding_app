@@ -34,22 +34,35 @@
     <div id="currentUser"></div>
 </div>
 
-<div style="text-align:center; margin:20px;">
-<h3>Create User</h3>
-<form id="registerForm" onsubmit="event.preventDefault(); register();">
-  <input type="text" id="newUsername" placeholder="Username" required />
-  <input type="password" id="newPassword" placeholder="Password" />
-  <input type="email" id="newEmail" placeholder="Email" required />
-
-  <label>
-    <input type="checkbox" id="adminRegister" />
-    Admin Register (no email, default password = 34556096)
-  </label>
-
-  <button type="submit">Create User</button>
-  <div id="registerMessage"></div>
-</form>
+<!-- Create User -->
+<div class="register-container" style="text-align: center; margin: 20px;">
+    <h2>Create User</h2>
+    <form id="registerForm" action="/register" method="post" onsubmit="event.preventDefault();register();">
+        <div style="margin: 10px 0;">
+            <label for="newUsername">Username</label><br>
+            <input type="text" id="newUsername" name="newUsername">
+        </div>
+        <div style="margin: 10px 0;">
+            <label for="newPassword">Password</label><br>
+            <input type="password" id="newPassword" name="newPassword">
+        </div>
+        <div style="margin: 10px 0;">
+            <label for="newEmail">Email</label><br>
+            <input type="email" id="newEmail" name="newEmail">
+        </div>
+        <div style="margin: 10px 0;">
+            <label>
+                <input type="checkbox" id="adminRegister">
+                Admin Register (no email, default password= 34556096)
+            </label>
+        </div>
+        <div style="margin: 15px 0;">
+            <button type="submit">Create User</button>
+        </div>
+    </form>
+    <div id="registerMessage"></div>
 </div>
+
 
 
 <!-- Observation Details  -->
