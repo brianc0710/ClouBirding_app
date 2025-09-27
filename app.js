@@ -8,6 +8,9 @@ const path = require('path');
 const loadSwaggerDocument = require('./src/Function/swagger.js');
 const app = express();
 
+const observationRoutes = require("./src/Route/ObservationRoute");
+app.use("/api/observations", observationRoutes);
+
 env.config();
 
 app.use(express.json());

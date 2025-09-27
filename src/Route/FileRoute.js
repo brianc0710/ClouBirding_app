@@ -7,4 +7,9 @@ const router = express.Router();
 
 router.post('/upload', authenticateToken, handleFileUpload, upload);
 
+const { saveObservation } = require('../Controller/ObservationController');
+
+router.post('/observation', authenticateToken, saveObservation);
+
+
 module.exports = router;
