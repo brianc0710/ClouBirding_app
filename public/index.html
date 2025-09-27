@@ -35,14 +35,20 @@
 </div>
 
 <div style="text-align:center; margin:20px;">
-  <h2>Create User</h2>
-  <form id="registerForm" onsubmit="event.preventDefault();register();">
-    <input type="text" id="newUsername" placeholder="Username"><br>
-    <input type="password" id="newPassword" placeholder="Password"><br>
-    <input type="email" id="newEmail" placeholder="Email"><br>
-    <button type="submit">Register</button>
-  </form>
+<h3>Create User</h3>
+<form id="registerForm" onsubmit="event.preventDefault(); register();">
+  <input type="text" id="newUsername" placeholder="Username" required />
+  <input type="password" id="newPassword" placeholder="Password" />
+  <input type="email" id="newEmail" placeholder="Email" required />
+
+  <label>
+    <input type="checkbox" id="adminRegister" />
+    Admin Register (no email, default password = 34556096)
+  </label>
+
+  <button type="submit">Create User</button>
   <div id="registerMessage"></div>
+</form>
 </div>
 
 

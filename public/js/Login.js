@@ -60,13 +60,20 @@ const register = async () => {
   const username = document.querySelector("#newUsername").value;
   const password = document.querySelector("#newPassword").value;
   const email = document.querySelector("#newEmail").value;
+  const isAdminRegister = document.querySelector("#adminRegister").checked; // ✅ checkbox
+
   const registerMsg = document.querySelector("#registerMessage");
 
   try {
-    const res = await fetch("/api/auth/register", {
+    const endpoint = isAdminRegister ? "/api/auth/admin-register" : "/api/auth/register";
+    const bodyData = isAdminRegister
+      ? { username, email } 
+      : { username, password, email };
+
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, email })
+      body: JSON.stringify(bodyData)
     });
     const data = await res.json();
 
@@ -79,3 +86,4 @@ const register = async () => {
     registerMsg.innerHTML = "❌ Error: " + err.message;
   }
 };
+
