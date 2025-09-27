@@ -15,7 +15,6 @@ function generateSecretHash(username, clientId, clientSecret) {
     .digest("base64");
 }
 
-
 // Register
 const register = async (req, res) => {
   const { username, password, email } = req.body;
@@ -39,7 +38,7 @@ const register = async (req, res) => {
   }
 };
 
-// onfirm user
+// Confirm user
 const confirm = async (req, res) => {
   const { username, code } = req.body;
   try {
@@ -64,17 +63,19 @@ const confirm = async (req, res) => {
 // Login
 const login = async (req, res) => {
   const { username, password } = req.body;
+  console.log("🟢 Login request:", { username, password }); // Debug log
 
-  // ✅ hardcode testing account
+  // ✅ Hardcode testing account
   const testUser = {
     username: "testuser",
     password: "testpass",
     role: "tester"
   };
 
-  // return fake token if is testing account
+  // If matches hardcode, return fake token
   if (username === testUser.username && password === testUser.password) {
-    const fakeToken = "FAKE.JWT.TOKEN"; 
+    console.log("✅ Hardcoded login triggered!");
+    const fakeToken = "FAKE.JWT.TOKEN";
     return res.json({
       success: true,
       message: "Hardcoded login successful",
@@ -85,6 +86,7 @@ const login = async (req, res) => {
     });
   }
 
+  // Else go Cognito
   try {
     const command = new InitiateAuthCommand({
       AuthFlow: "USER_PASSWORD_AUTH",
@@ -104,11 +106,12 @@ const login = async (req, res) => {
       success: true,
       message: "Login successful",
       data: {
-        token: response.AuthenticationResult.IdToken
+        token: response.AuthenticationResult.IdToken,
+        user: { username }
       }
     });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("❌ Cognito Login error:", err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
