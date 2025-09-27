@@ -4,9 +4,18 @@ const {
   ConfirmSignUpCommand,
   InitiateAuthCommand
 } = require("@aws-sdk/client-cognito-identity-provider");
+const crypto = require("crypto");
 
 const client = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
 
+function generateSecretHash(username, clientId, clientSecret) {
+  return crypto
+    .createHmac("SHA256", clientSecret)
+    .update(username + clientId)
+    .digest("base64");
+}
+
+// Sign up
 const signup = async (req, res) => {
   const { username, password, email } = req.body;
   try {
@@ -14,6 +23,11 @@ const signup = async (req, res) => {
       ClientId: process.env.COGNITO_CLIENT_ID,
       Username: username,
       Password: password,
+      SecretHash: generateSecretHash(
+        username,
+        process.env.COGNITO_CLIENT_ID,
+        process.env.COGNITO_CLIENT_SECRET
+      ),
       UserAttributes: [{ Name: "email", Value: email }]
     });
     const response = await client.send(command);
@@ -24,21 +38,29 @@ const signup = async (req, res) => {
   }
 };
 
+// onfirm user
 const confirm = async (req, res) => {
   const { username, code } = req.body;
   try {
     const command = new ConfirmSignUpCommand({
       ClientId: process.env.COGNITO_CLIENT_ID,
       Username: username,
-      ConfirmationCode: code
+      ConfirmationCode: code,
+      SecretHash: generateSecretHash(
+        username,
+        process.env.COGNITO_CLIENT_ID,
+        process.env.COGNITO_CLIENT_SECRET
+      )
     });
     await client.send(command);
     res.json({ success: true, message: "User confirmed successfully" });
   } catch (err) {
+    console.error("Confirm error:", err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
 
+// Login
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -47,7 +69,12 @@ const login = async (req, res) => {
       ClientId: process.env.COGNITO_CLIENT_ID,
       AuthParameters: {
         USERNAME: username,
-        PASSWORD: password
+        PASSWORD: password,
+        SECRET_HASH: generateSecretHash(
+          username,
+          process.env.COGNITO_CLIENT_ID,
+          process.env.COGNITO_CLIENT_SECRET
+        )
       }
     });
     const response = await client.send(command);
