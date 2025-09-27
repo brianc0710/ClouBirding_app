@@ -41,7 +41,7 @@ const register = async (req, res) => {
 /**
  * Admin Register
  */
-const adminRegister = async (req, res) => {
+const adminregister = async (req, res) => {
   const { username, email } = req.body;
   try {
     const command = new AdminCreateUserCommand({
@@ -113,4 +113,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, confirm, login };
+module.exports = { register, adminregister, confirm, login };
