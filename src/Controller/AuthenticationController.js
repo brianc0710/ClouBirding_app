@@ -15,6 +15,7 @@ function generateSecretHash(username, clientId, clientSecret) {
     .digest("base64");
 }
 
+
 // Register
 const register = async (req, res) => {
   const { username, password, email } = req.body;

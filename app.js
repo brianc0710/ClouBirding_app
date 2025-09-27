@@ -6,6 +6,7 @@ const fileRoutes = require('./src/Route/FileRoute');
 const fs = require('fs');
 const path = require('path');
 const loadSwaggerDocument = require('./src/Function/swagger.js');
+const { getParameter } = require("./src/parameterStore.js");
 const app = express();
 
 env.config();
@@ -26,3 +27,16 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+//Parameter
+const { getParameter } = require("./src/parameterStore");
+
+(async () => {
+  const serviceUrl = await getParameter("/n10820566/cloubirding");
+  console.log("ClouBirding Service URL:", serviceUrl);
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+})();
