@@ -20,6 +20,9 @@ app.use("/api/observations", observationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/file', fileRoutes);
 
+const observationCacheRoutes = require("./src/Route/ObservationCacheRoute");
+app.use("/api", observationCacheRoutes);
+
 // Swagger
 const swaggerDocument = loadSwaggerDocument();
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
