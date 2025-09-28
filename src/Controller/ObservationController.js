@@ -3,7 +3,7 @@ const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { v4: uuidv4 } = require("uuid");
 
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
-const TABLE_NAME = process.env.DYNAMO_TABLE;
+const TABLE_NAME = "10820566CloudBirdingObservations";
 
 // Controller/ObservationController.js
 const saveObservation = async (req, res) => {
