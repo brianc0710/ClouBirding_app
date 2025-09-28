@@ -82,3 +82,26 @@ const register = async () => {
   }
 };
 
+const confirmUser = async () => {
+  const username = document.querySelector("#confirmUsername").value;
+  const code = document.querySelector("#confirmCode").value;
+  const confirmMsg = document.querySelector("#confirmMessage");
+
+  try {
+    const res = await fetch("/api/auth/confirm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, code })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      confirmMsg.innerHTML = "✅ User confirmed successfully!";
+    } else {
+      confirmMsg.innerHTML = "❌ " + data.message;
+    }
+  } catch (err) {
+    confirmMsg.innerHTML = "❌ Error: " + err.message;
+  }
+};
+
