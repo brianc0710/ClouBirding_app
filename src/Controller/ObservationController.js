@@ -31,6 +31,28 @@ const saveObservation = async (req, res) => {
 
         await dynamoClient.send(new PutItemCommand(params));
 
+        // send message to sqs
+        const message = {
+            observationId,
+            userId,
+            species,
+            location,
+            comment,
+            fileURL,
+            createdAt,
+        };
+
+        try {
+            const command = new SendMessageCommand({
+                QueueUrl: QUEUE_URL,
+                MessageBody: JSON.stringify(message),
+            });
+            await sqsClient.send(command);
+            console.log("✅ Sent message to SQS:", message);
+        } catch (sqsErr) {
+            console.error("❌ Failed to send message to SQS:", sqsErr);
+        }
+
         console.log("Saved successfully:", observationId);
 
         res.status(200).json({
