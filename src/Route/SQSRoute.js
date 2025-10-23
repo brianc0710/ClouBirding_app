@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendObservationMessage, receiveMessages } = require("../Controller/SQSTestController");
+const { sendObservationMessage, receiveMessages } = require("../Controller/SQSController");
 const router = express.Router();
 
 router.post("/sqs/send", sendObservationMessage);
