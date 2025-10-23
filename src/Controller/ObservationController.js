@@ -1,13 +1,17 @@
 const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { SQSClient, SendMessageCommand } = require("@aws-sdk/client-sqs"); 
 const { v4: uuidv4 } = require("uuid");
 
 const dynamoClient = new DynamoDBClient({ region: process.env.AWS_REGION });
+const sqsClient = new SQSClient({ region: process.env.AWS_REGION }); 
+
 const TABLE_NAME = "10820566CloudBirdingObservations";
+const QUEUE_URL = "https://sqs.ap-southeast-2.amazonaws.com/901444280953/n10820566-ClouBirding-queue"; 
 
 const saveObservation = async (req, res) => {
     try {
         const { species, year, month, day, location, comment, fileURL } = req.body;
-        const userId = req.user?.id || "anonymous"; 
+        const userId = req.user?.id || "anonymous";
 
         const observationId = uuidv4();
         const time = `${year}-${month}-${day}`;
@@ -28,10 +32,9 @@ const saveObservation = async (req, res) => {
         };
 
         console.log("Saving observation:", params);
-
         await dynamoClient.send(new PutItemCommand(params));
 
-        // send message to sqs
+        // 🔹 Send message to SQS after successful save
         const message = {
             observationId,
             userId,
@@ -54,7 +57,6 @@ const saveObservation = async (req, res) => {
         }
 
         console.log("Saved successfully:", observationId);
-
         res.status(200).json({
             success: true,
             message: "Observation saved",
@@ -68,6 +70,5 @@ const saveObservation = async (req, res) => {
         });
     }
 };
-
 
 module.exports = { saveObservation };
