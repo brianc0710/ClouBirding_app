@@ -1,4 +1,3 @@
-// routes/ObservationRoute.js
 const express = require("express");
 const { authenticateToken } = require("../Function/Authentication");
 const { saveObservation } = require("../Controller/ObservationController");

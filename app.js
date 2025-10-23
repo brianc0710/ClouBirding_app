@@ -23,6 +23,9 @@ app.use('/api/file', fileRoutes);
 const observationCacheRoutes = require("./src/Route/ObservationCacheRoute");
 app.use("/api", observationCacheRoutes);
 
+const sqsTestRoutes = require("./src/Route/SQSTestRoute");
+app.use("/api", sqsTestRoutes);
+
 // Swagger
 const swaggerDocument = loadSwaggerDocument();
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));

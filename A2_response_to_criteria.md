@@ -20,9 +20,10 @@ Overview
 - **Two line description:** A website for uploading photos and videos of wildlife observations, which also allows map-based interaction similar to eBird to explore wildlife data in a given area.
 - **EC2 instance name or ID:** i-0521f2001c19f649b
 
-(In the Cognito part of the assessment, I was unable to make further progress due to authorization issues (AccessDenied, I can't change into Send email with Amazon SES). However, I did complete part of the code and setup. To avoid blocking the rest of the implementation, I temporarily hard-coded a working username and password to demonstrate the other functionalities.)
+(In the Cognito part of the assessment, I was unable to make further progress due to authorization issues (AccessDenied, I can't change into Send email with Amazon SES). 
+However, I did complete part of the code and setup. To avoid blocking the rest of the implementation, I temporarily hard-coded a working username and password to demonstrate the other functionalities.)
 (username: testuser password: testpass)
-
+(AccessDenied Proof : acessdenied.png)
 ------------------------------------------------
 
 ### Core - First data persistence service
@@ -121,10 +122,11 @@ On the server side, middleware (authenticateToken) validates the JWT with the Co
 
 ### Cognito multi-factor authentication
 
-- **What factors are used for authentication:** 
-- **Video timestamp:**
+- **What factors are used for authentication:** Username + Password, and Time-based One-Time Password (TOTP) from an authenticator app (e.g., Google Authenticator).
+- **Video timestamp:** 
 - **Relevant files:**
-    -
+    - AuthenticationController.js
+    - Login.js
 
 ### Cognito federated identities
 
@@ -135,10 +137,12 @@ On the server side, middleware (authenticateToken) validates the JWT with the Co
 
 ### Cognito groups
 
-- **How are groups used to set permissions?:** 
-- **Video timestamp:**
+- **How are groups used to set permissions?:** Two Groups (dmin, user) are defined in the Cognito User Pool. When a user logs in, their group membership is included in the JWT token (cognito:groups). This is used in middleware to restrict access, e.g., only admin can delete observations.
+- **Video timestamp:** 
 - **Relevant files:**
-    -
+    - Login.js
+    - AuthenticationController.js
+    - Authentication.js
 
 ### Core - DNS with Route53
 
@@ -162,11 +166,14 @@ On the server side, middleware (authenticateToken) validates the JWT with the Co
 
 ### Infrastructure as code
 
-- **Technology used:**
-- **Services deployed:**
-- **Video timestamp:**
+- **Technology used:**Docker (Dockerfile defines the container environment, package.json manages dependencies, .env stores environment variables)
+- **Services deployed:**Node.js application (Express API), integrated with AWS services (DynamoDB, S3, Cognito, ElastiCache)
+- **Video timestamp:** 0:00 ~ 0:03
 - **Relevant files:**
-    -
+    - Dockerfile
+    - package.json
+    - .env
+    - swagger.yaml
 
 ### Other (with prior approval only)
 
