@@ -6,18 +6,27 @@ const bucketName = "n10820566-cloubirding";
 
 // Upload file to S3
 async function uploadFileToS3(file) {
+    const metadata = {
+        species: (file.species || "unknown").toLowerCase(),
+        location: (file.location || "unknown").toLowerCase(),
+        comment: file.comment || "none",
+        user: file.user || "anonymous",
+    };
+
     const params = {
         Bucket: bucketName,
-        Key: file.originalname, 
-        Body: file.buffer, 
+        Key: file.originalname,
+        Body: file.buffer,
         ContentType: file.mimetype,
+        Metadata: metadata, // key for Lambda trigger
     };
 
     const command = new PutObjectCommand(params);
     await s3Client.send(command);
 
-    return file.originalname; // return filename to frontend
+    return file.originalname;
 }
+
 
 // generate Pre-signed URL
 async function generatePresignedURL(key) {

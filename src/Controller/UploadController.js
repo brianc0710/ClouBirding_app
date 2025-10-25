@@ -7,6 +7,12 @@ const upload = async (req, res) => {
             return res.status(400).json({ success: false, message: "No file uploaded" });
         }
 
+        file.species = req.body.species;
+        file.location = req.body.location;
+        file.comment = req.body.comment;
+        file.user = req.user?.id || "anonymous";
+
+        // upload to S3
         const fileName = await uploadFileToS3(file);
 
         // generate pre-signed URL
@@ -16,7 +22,7 @@ const upload = async (req, res) => {
             success: true,
             message: "File uploaded successfully",
             fileName,
-            fileURL, 
+            fileURL,
             mimeType: file.mimetype,
             fileSize: file.size,
         });
